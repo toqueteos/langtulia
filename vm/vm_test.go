@@ -23,7 +23,20 @@ func TestAddLoop(t *testing.T) {
 	}
 }
 
+func TestJumps(t *testing.T) {
+	tests := []TestCase{
+		{[]int{PUSH, 2, J, 6, PUSH, 4, PUSH, 3, ADD, HALT}, 5},
 	}
+
+	for _, tt := range tests {
+		vm := New(tt.Code)
+		vm.Run()
+
+		if vm.stack[0] != tt.TopOfStack {
+			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[0])
+		}
+	}
+}
 
 func TestShiftLogical(t *testing.T) {
 	tests := []TestCase{
