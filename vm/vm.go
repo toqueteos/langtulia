@@ -13,6 +13,8 @@ const (
 	JMPEQ
 	JMPNE
 	J
+	SLL
+	SRL
 )
 
 type op struct {
@@ -28,6 +30,8 @@ var ops = map[int]op{
 	JMPEQ: op{"jmpeq", 2},
 	JMPNE: op{"jmpne", 2},
 	J:     op{"j", 1},
+	SLL:   op{"sll", 2},
+	SRL:   op{"srl", 2},
 }
 
 type VM struct {
@@ -112,6 +116,22 @@ func (v *VM) Run() {
 			addr := v.code[v.pc]
 			// v.pc++
 			v.pc = addr
+		case SLL:
+			a := uint(v.stack[v.sp])
+			v.sp--
+			b := uint(v.stack[v.sp])
+			v.sp--
+
+			v.sp++
+			v.stack[v.sp] = int(a << b)
+		case SRL:
+			a := uint(v.stack[v.sp])
+			v.sp--
+			b := uint(v.stack[v.sp])
+			v.sp--
+
+			v.sp++
+			v.stack[v.sp] = int(a >> b)
 		case HALT:
 			return
 		}
