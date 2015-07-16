@@ -3,14 +3,14 @@ package vm
 import "testing"
 
 type TestCase struct {
-	Code       []int
-	TopOfStack int
+	Code       []int32
+	TopOfStack int32
 }
 
 func TestAddLoop(t *testing.T) {
 	tests := []TestCase{
-		{[]int{PUSH, 0, PUSH, 1, ADD, HALT}, 1},
-		{[]int{PUSH, 2, PUSH, 3, ADD, JMPNE, 17, 2, HALT}, 17},
+		{[]int32{PUSH, 0, PUSH, 1, ADD, HALT}, 1},
+		{[]int32{PUSH, 2, PUSH, 3, ADD, JMPNE, 17, 2, HALT}, 17},
 	}
 
 	for _, tt := range tests {
@@ -25,7 +25,7 @@ func TestAddLoop(t *testing.T) {
 
 func TestJumps(t *testing.T) {
 	tests := []TestCase{
-		{[]int{PUSH, 2, J, 6, PUSH, 4, PUSH, 3, ADD, HALT}, 5},
+		{[]int32{PUSH, 2, J, 6, PUSH, 4, PUSH, 3, ADD, HALT}, 5},
 	}
 
 	for _, tt := range tests {
@@ -40,8 +40,8 @@ func TestJumps(t *testing.T) {
 
 func TestShiftLogical(t *testing.T) {
 	tests := []TestCase{
-		{[]int{PUSH, 3, PUSH, 1, SLL, HALT}, 8},
-		{[]int{PUSH, 2, PUSH, 8, SRL, HALT}, 2},
+		{[]int32{PUSH, 3, PUSH, 1, SLL, HALT}, 8},
+		{[]int32{PUSH, 2, PUSH, 8, SRL, HALT}, 2},
 	}
 
 	for _, tt := range tests {

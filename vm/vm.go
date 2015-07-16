@@ -5,24 +5,24 @@ import (
 )
 
 const (
-	HALT int = iota
-	PUSH
 	POP
-	ADD
-	PRINT
-	JMPEQ
-	JMPNE
-	J
-	SLL
-	SRL
+	HALT  int32 = iota // Halt
+	PUSH               // Push To Stack
+	ADD                // Add
+	PRINT              // Print
+	JMPEQ              // Jump If Equal
+	JMPNE              // Jump If Not Equal
+	J                  // Jump Inconditionally
+	SLL                // Shift Left Logical
+	SRL                // Shift Right Logical
 )
 
 type op struct {
 	name  string
-	nargs int
+	nargs int32
 }
 
-var ops = map[int]op{
+var ops = map[int32]op{
 	PUSH:  op{"push", 1},
 	ADD:   op{"add", 0},
 	PRINT: op{"print", 0},
@@ -35,18 +35,18 @@ var ops = map[int]op{
 }
 
 type VM struct {
-	code []int
-	pc   int
+	code []int32
+	pc   int32
 
-	stack []int
-	sp    int
+	stack []int32
+	sp    int32
 
 	trace bool
 }
 
-func New(code []int) *VM {
+func New(code []int32) *VM {
 	return &VM{
-		stack: make([]int, 128),
+		stack: make([]int32, 128),
 		sp:    -1,
 		code:  code,
 		pc:    0,
@@ -123,7 +123,7 @@ func (v *VM) Run() {
 			v.sp--
 
 			v.sp++
-			v.stack[v.sp] = int(a << b)
+			v.stack[v.sp] = int32(a << b)
 		case SRL:
 			a := uint(v.stack[v.sp])
 			v.sp--
@@ -131,7 +131,7 @@ func (v *VM) Run() {
 			v.sp--
 
 			v.sp++
-			v.stack[v.sp] = int(a >> b)
+			v.stack[v.sp] = int32(a >> b)
 		case HALT:
 			return
 		}
