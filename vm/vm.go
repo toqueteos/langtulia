@@ -5,7 +5,6 @@ import (
 )
 
 const (
-	POP
 	HALT  int32 = iota // Halt
 	PUSH               // Push To Stack
 	ADD                // Add
