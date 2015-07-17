@@ -7,7 +7,7 @@ import (
 const (
 	HALT  int32 = iota // Halt
 	NOP                // Nop
-	PUSH               // Push To Stack
+	PUSH               // Push to Top of Stack
 	POP                // Remove from Top of Stack
 	ADD                // Add
 	PRINT              // Print
