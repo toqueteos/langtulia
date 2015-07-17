@@ -46,7 +46,7 @@ var ops = map[int32]op{
 	JEQ:   op{"jeq", 2},
 	JNE:   op{"jne", 2},
 	J:     op{"j", 1},
-	SLT:   op{"slt", 2},
+	SLT:   op{"slt", 1},
 	SLL:   op{"sll", 2},
 	SRL:   op{"srl", 2},
 }
@@ -194,8 +194,8 @@ func (v *VM) Run() {
 		case SLT:
 			a := v.stack[v.sp]
 			v.sp--
-			b := v.stack[v.sp]
-			v.sp--
+			b := v.code[v.pc]
+			v.pc++
 
 			v.sp++
 			v.stack[v.sp] = bint32[a < b]
