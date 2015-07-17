@@ -10,6 +10,7 @@ const (
 	PUSH               // Push to Top of Stack
 	POP                // Remove from Top of Stack
 	ADD                // Add
+	MUL                // Multiplication
 	PRINT              // Print
 	JMPEQ              // Jump If Equal
 	JMPNE              // Jump If Not Equal
@@ -34,6 +35,7 @@ var ops = map[int32]op{
 	PUSH:  op{"push", 1},
 	POP:   op{"pop", 0},
 	ADD:   op{"add", 0},
+	MUL:   op{"mul", 0},
 	PRINT: op{"print", 0},
 	HALT:  op{"halt", 0},
 	JMPEQ: op{"jmpeq", 2},
@@ -105,6 +107,15 @@ func (v *VM) Run() {
 
 			v.sp++
 			v.stack[v.sp] = a + b
+		case MUL:
+			a := int64(v.stack[v.sp])
+			v.sp--
+			b := int64(v.stack[v.sp])
+			v.sp--
+
+			c := a * b
+			v.r[LO] = int32((c << 32) >> 32)
+			v.r[HI] = int32(c >> 32)
 		case PRINT:
 			val := v.stack[v.sp]
 			v.sp--
