@@ -33,6 +33,7 @@ type op struct {
 }
 
 var ops = map[int32]op{
+	HALT:  op{"halt", 0},
 	NOP:   op{"nop", 0},
 	PUSH:  op{"push", 1},
 	POP:   op{"pop", 0},
@@ -41,7 +42,6 @@ var ops = map[int32]op{
 	DIV:   op{"div", 0},
 	MOD:   op{"mod", 0},
 	PRINT: op{"print", 0},
-	HALT:  op{"halt", 0},
 	JEQ:   op{"jeq", 2},
 	JNE:   op{"jne", 2},
 	J:     op{"j", 1},
@@ -188,7 +188,6 @@ func (v *VM) Run() {
 			}
 		case J:
 			addr := v.code[v.pc]
-			// v.pc++
 			v.pc = addr
 		case SLL:
 			a := uint(v.stack[v.sp])

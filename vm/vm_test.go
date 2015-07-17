@@ -18,12 +18,12 @@ func TestCommon(t *testing.T) {
 		{[]int32{PUSH, 7, PUSH, 0x1234, MOD, HALT}, 5},
 	}
 
-	for _, tt := range tests {
+	for idx, tt := range tests {
 		vm := New(tt.Code)
 		vm.Run()
 
 		if vm.stack[vm.sp] != tt.TopOfStack {
-			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[vm.sp])
+			t.Errorf("%d. expected %d, got %d", idx, tt.TopOfStack, vm.stack[vm.sp])
 		}
 	}
 }
@@ -62,8 +62,8 @@ func TestAddLoop(t *testing.T) {
 		vm := New(tt.Code)
 		vm.Run()
 
-		if vm.stack[0] != tt.TopOfStack {
-			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[0])
+		if vm.stack[vm.sp] != tt.TopOfStack {
+			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[vm.sp])
 		}
 	}
 }
@@ -99,8 +99,8 @@ func TestJumps(t *testing.T) {
 		vm := New(tt.Code)
 		vm.Run()
 
-		if vm.stack[0] != tt.TopOfStack {
-			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[0])
+		if vm.stack[vm.sp] != tt.TopOfStack {
+			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[vm.sp])
 		}
 	}
 }
@@ -115,8 +115,8 @@ func TestShiftLogical(t *testing.T) {
 		vm := New(tt.Code)
 		vm.Run()
 
-		if vm.stack[0] != tt.TopOfStack {
-			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[0])
+		if vm.stack[vm.sp] != tt.TopOfStack {
+			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[vm.sp])
 		}
 	}
 }
