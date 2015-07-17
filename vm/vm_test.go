@@ -93,6 +93,8 @@ func TestJumps(t *testing.T) {
 	tests := []TestCase{
 		{[]int32{PUSH, 2, J, 6, PUSH, 4, PUSH, 3, ADD, HALT}, 5},
 		{[]int32{PUSH, 2, J, 5, NOP, PUSH, 3, ADD, HALT}, 5},
+		{[]int32{PUSH, 0, SLT, 1, HALT}, 1},
+		{[]int32{PUSH, 2, SLT, 1, HALT}, 0},
 	}
 
 	for _, tt := range tests {

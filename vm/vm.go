@@ -17,6 +17,7 @@ const (
 	JEQ                // Jump If Equal
 	JNE                // Jump If Not Equal
 	J                  // Jump Inconditionally
+	SLT                // Set If Less Than
 	SLL                // Shift Left Logical
 	SRL                // Shift Right Logical
 )
@@ -45,6 +46,7 @@ var ops = map[int32]op{
 	JEQ:   op{"jeq", 2},
 	JNE:   op{"jne", 2},
 	J:     op{"j", 1},
+	SLT:   op{"slt", 2},
 	SLL:   op{"sll", 2},
 	SRL:   op{"srl", 2},
 }
@@ -189,6 +191,14 @@ func (v *VM) Run() {
 		case J:
 			addr := v.code[v.pc]
 			v.pc = addr
+		case SLT:
+			a := v.stack[v.sp]
+			v.sp--
+			b := v.stack[v.sp]
+			v.sp--
+
+			v.sp++
+			v.stack[v.sp] = bint32[a < b]
 		case SLL:
 			a := uint(v.stack[v.sp])
 			v.sp--
@@ -209,4 +219,9 @@ func (v *VM) Run() {
 			return
 		}
 	}
+}
+
+var bint32 = map[bool]int32{
+	false: 0,
+	true:  1,
 }
