@@ -8,6 +8,7 @@ const (
 	HALT  int32 = iota // Halt
 	NOP                // Nop
 	PUSH               // Push To Stack
+	POP                // Remove from Top of Stack
 	ADD                // Add
 	PRINT              // Print
 	JMPEQ              // Jump If Equal
@@ -25,6 +26,7 @@ type op struct {
 var ops = map[int32]op{
 	NOP:   op{"nop", 0},
 	PUSH:  op{"push", 1},
+	POP:   op{"pop", 0},
 	ADD:   op{"add", 0},
 	PRINT: op{"print", 0},
 	HALT:  op{"halt", 0},
@@ -85,6 +87,8 @@ func (v *VM) Run() {
 
 			v.sp++
 			v.stack[v.sp] = val
+		case POP:
+			v.sp--
 		case ADD:
 			a := v.stack[v.sp]
 			v.sp--

@@ -7,6 +7,22 @@ type TestCase struct {
 	TopOfStack int32
 }
 
+func TestCommon(t *testing.T) {
+	tests := []TestCase{
+		{[]int32{PUSH, 2, PUSH, 3, PUSH, 4, PUSH, 5, POP, POP, HALT}, 3},
+		{[]int32{PUSH, 2, NOP, NOP, HALT}, 2},
+	}
+
+	for _, tt := range tests {
+		vm := New(tt.Code)
+		vm.Run()
+
+		if vm.stack[vm.sp] != tt.TopOfStack {
+			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[vm.sp])
+		}
+	}
+}
+
 func TestAddLoop(t *testing.T) {
 	tests := []TestCase{
 		{[]int32{PUSH, 0, PUSH, 1, ADD, HALT}, 1},
