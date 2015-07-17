@@ -12,8 +12,10 @@ type TestCase struct {
 
 func TestCommon(t *testing.T) {
 	tests := []TestCase{
-		{[]int32{PUSH, 2, PUSH, 3, PUSH, 4, PUSH, 5, POP, POP, HALT}, 3},
 		{[]int32{PUSH, 2, NOP, NOP, HALT}, 2},
+		{[]int32{PUSH, 2, PUSH, 3, NOP, HALT}, 3},
+		{[]int32{PUSH, 2, PUSH, 3, PUSH, 4, PUSH, 5, POP, POP, HALT}, 3},
+		{[]int32{PUSH, 7, PUSH, 0x1234, MOD, HALT}, 5},
 	}
 
 	for _, tt := range tests {

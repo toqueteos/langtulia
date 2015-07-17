@@ -12,6 +12,7 @@ const (
 	ADD                // Add
 	MUL                // Multiplication
 	DIV                // Division
+	MOD                // Modulo
 	PRINT              // Print
 	JMPEQ              // Jump If Equal
 	JMPNE              // Jump If Not Equal
@@ -38,6 +39,7 @@ var ops = map[int32]op{
 	ADD:   op{"add", 0},
 	MUL:   op{"mul", 0},
 	DIV:   op{"div", 0},
+	MOD:   op{"mod", 0},
 	PRINT: op{"print", 0},
 	HALT:  op{"halt", 0},
 	JMPEQ: op{"jmpeq", 2},
@@ -154,6 +156,14 @@ func (v *VM) Run() {
 
 			v.r[LO] = a / b
 			v.r[HI] = a % b
+		case MOD:
+			a := v.stack[v.sp]
+			v.sp--
+			b := v.stack[v.sp]
+			v.sp--
+
+			v.sp++
+			v.stack[v.sp] = a % b
 		case PRINT:
 			val := v.stack[v.sp]
 			v.sp--
