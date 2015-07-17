@@ -26,6 +26,7 @@ func TestAddLoop(t *testing.T) {
 func TestJumps(t *testing.T) {
 	tests := []TestCase{
 		{[]int32{PUSH, 2, J, 6, PUSH, 4, PUSH, 3, ADD, HALT}, 5},
+		{[]int32{PUSH, 2, J, 5, NOP, PUSH, 3, ADD, HALT}, 5},
 	}
 
 	for _, tt := range tests {

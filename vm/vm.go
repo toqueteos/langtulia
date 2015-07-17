@@ -6,6 +6,7 @@ import (
 
 const (
 	HALT  int32 = iota // Halt
+	NOP                // Nop
 	PUSH               // Push To Stack
 	ADD                // Add
 	PRINT              // Print
@@ -22,6 +23,7 @@ type op struct {
 }
 
 var ops = map[int32]op{
+	NOP:   op{"nop", 0},
 	PUSH:  op{"push", 1},
 	ADD:   op{"add", 0},
 	PRINT: op{"print", 0},
@@ -75,6 +77,8 @@ func (v *VM) Run() {
 
 		// Decode
 		switch op {
+		case NOP:
+			// Derp
 		case PUSH:
 			val := v.code[v.pc]
 			v.pc++
