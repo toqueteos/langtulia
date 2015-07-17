@@ -11,6 +11,7 @@ const (
 	POP                // Remove from Top of Stack
 	ADD                // Add
 	MUL                // Multiplication
+	DIV                // Division
 	PRINT              // Print
 	JMPEQ              // Jump If Equal
 	JMPNE              // Jump If Not Equal
@@ -36,6 +37,7 @@ var ops = map[int32]op{
 	POP:   op{"pop", 0},
 	ADD:   op{"add", 0},
 	MUL:   op{"mul", 0},
+	DIV:   op{"div", 0},
 	PRINT: op{"print", 0},
 	HALT:  op{"halt", 0},
 	JMPEQ: op{"jmpeq", 2},
@@ -116,6 +118,14 @@ func (v *VM) Run() {
 			c := a * b
 			v.r[LO] = int32((c << 32) >> 32)
 			v.r[HI] = int32(c >> 32)
+		case DIV:
+			a := v.stack[v.sp]
+			v.sp--
+			b := v.stack[v.sp]
+			v.sp--
+
+			v.r[LO] = a / b
+			v.r[HI] = a % b
 		case PRINT:
 			val := v.stack[v.sp]
 			v.sp--

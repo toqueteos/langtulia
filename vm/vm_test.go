@@ -23,7 +23,7 @@ func TestCommon(t *testing.T) {
 	}
 }
 
-func TestMul(t *testing.T) {
+func TestArith(t *testing.T) {
 	type MulCase struct {
 		Code   []int32
 		Hi, Lo int32
@@ -31,6 +31,8 @@ func TestMul(t *testing.T) {
 	tests := []MulCase{
 		{[]int32{PUSH, 0x1234, PUSH, 0x4321, MUL, HALT}, 0, 0x04c5f4b4},
 		{[]int32{PUSH, 0x66778899, PUSH, 0x66778899, MUL, HALT}, 0x290378aa, 0x3320eb71},
+		{[]int32{PUSH, 0x1234, PUSH, 0x4321, DIV, HALT}, 0x00000c85, 0x00000003},
+		{[]int32{PUSH, 0x66778899, PUSH, 0x66778899, DIV, HALT}, 0, 1},
 	}
 	for idx, tt := range tests {
 		vm := New(tt.Code)
