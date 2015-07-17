@@ -14,8 +14,8 @@ const (
 	DIV                // Division
 	MOD                // Modulo
 	PRINT              // Print
-	JMPEQ              // Jump If Equal
-	JMPNE              // Jump If Not Equal
+	JEQ                // Jump If Equal
+	JNE                // Jump If Not Equal
 	J                  // Jump Inconditionally
 	SLL                // Shift Left Logical
 	SRL                // Shift Right Logical
@@ -42,8 +42,8 @@ var ops = map[int32]op{
 	MOD:   op{"mod", 0},
 	PRINT: op{"print", 0},
 	HALT:  op{"halt", 0},
-	JMPEQ: op{"jmpeq", 2},
-	JMPNE: op{"jmpne", 2},
+	JEQ:   op{"jeq", 2},
+	JNE:   op{"jne", 2},
 	J:     op{"j", 1},
 	SLL:   op{"sll", 2},
 	SRL:   op{"srl", 2},
@@ -168,7 +168,7 @@ func (v *VM) Run() {
 			val := v.stack[v.sp]
 			v.sp--
 			fmt.Println(val)
-		case JMPEQ:
+		case JEQ:
 			eq := v.code[v.pc]
 			v.pc++
 			addr := v.code[v.pc]
@@ -177,7 +177,7 @@ func (v *VM) Run() {
 			if v.stack[v.sp] == eq {
 				v.pc = addr
 			}
-		case JMPNE:
+		case JNE:
 			ne := v.code[v.pc]
 			v.pc++
 			addr := v.code[v.pc]

@@ -55,7 +55,7 @@ func TestArith(t *testing.T) {
 func TestAddLoop(t *testing.T) {
 	tests := []TestCase{
 		{[]int32{PUSH, 0, PUSH, 1, ADD, HALT}, 1},
-		{[]int32{PUSH, 2, PUSH, 3, ADD, JMPNE, 17, 2, HALT}, 17},
+		{[]int32{PUSH, 2, PUSH, 3, ADD, JNE, 17, 2, HALT}, 17},
 	}
 
 	for _, tt := range tests {
