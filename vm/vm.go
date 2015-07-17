@@ -18,6 +18,12 @@ const (
 	SRL                // Shift Right Logical
 )
 
+const (
+	ZERO = iota
+	LO
+	HI
+)
+
 type op struct {
 	name  string
 	nargs int32
@@ -38,6 +44,8 @@ var ops = map[int32]op{
 }
 
 type VM struct {
+	r [32]int32 // registers
+
 	code []int32
 	pc   int32
 
