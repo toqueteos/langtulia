@@ -1,6 +1,9 @@
 package vm
 
-import "testing"
+import (
+	"math/rand"
+	"testing"
+)
 
 type TestCase struct {
 	Code       []int32
@@ -60,6 +63,27 @@ func TestAddLoop(t *testing.T) {
 		if vm.stack[0] != tt.TopOfStack {
 			t.Errorf("expected %d, got %d", tt.TopOfStack, vm.stack[0])
 		}
+	}
+}
+
+func TestStack(t *testing.T) {
+	const N = 1 << 16
+	var code []int32
+
+	for i := 1; i < N; i++ {
+		code = append(code, PUSH)
+		code = append(code, rand.Int31n(N))
+	}
+	for i := 0; i < (N - 2); i++ {
+		code = append(code, POP)
+	}
+	code = append(code, HALT)
+
+	vm := New(code)
+	vm.Run()
+	t.Logf("stack: % d -- sp: %d", vm.stack, vm.sp)
+	if vm.stack[vm.sp] != code[1] {
+		t.Errorf("expected %d, got %d", code[1], vm.stack[vm.sp])
 	}
 }
 

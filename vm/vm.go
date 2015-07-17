@@ -57,6 +57,12 @@ type VM struct {
 	sp    int32
 
 	trace bool
+	stats struct {
+		push   int
+		pop    int
+		grow   int
+		shrink int
+	}
 }
 
 func New(code []int32) *VM {
@@ -81,6 +87,23 @@ func (v *VM) maybeTrace() {
 	fmt.Printf("%04d: %s %v \t%v\n", addr, op.name, args, stack)
 }
 
+func (v *VM) resizeStack() {
+	// Need a bigger stack?
+	if (v.stats.push - v.stats.pop) >= (cap(v.stack) >> 1) {
+		stack := make([]int32, cap(v.stack)*2)
+		copy(stack, v.stack)
+		v.stack = stack
+		v.stats.grow++
+	}
+	// Want a smaller stack?
+	if (v.stats.push - v.stats.pop) < (cap(v.stack) >> 2) {
+		stack := make([]int32, cap(v.stack)>>1)
+		copy(stack, v.stack)
+		v.stack = stack
+		v.stats.shrink++
+	}
+}
+
 func (v *VM) Run() {
 	for {
 		v.maybeTrace()
@@ -88,6 +111,9 @@ func (v *VM) Run() {
 		// Fetch
 		op := v.code[v.pc]
 		v.pc++
+
+		// Resize stack
+		v.resizeStack()
 
 		// Decode
 		switch op {
@@ -99,8 +125,10 @@ func (v *VM) Run() {
 
 			v.sp++
 			v.stack[v.sp] = val
+			v.stats.push++
 		case POP:
 			v.sp--
+			v.stats.pop++
 		case ADD:
 			a := v.stack[v.sp]
 			v.sp--
