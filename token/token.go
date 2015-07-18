@@ -1,3 +1,4 @@
+// token defines an extensible token representation.
 package token
 
 type Token interface {
@@ -6,6 +7,7 @@ type Token interface {
 
 type token string
 
+// New returns string based Token which should be enough for most usages.
 func New(text string) Token {
 	return token(text)
 }
