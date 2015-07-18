@@ -12,5 +12,5 @@ func New(text string) Token {
 	return token(text)
 }
 
-func (t token) Text() string   { return t }
-func (t token) String() string { return t }
+func (t token) Text() string   { return string(t) }
+func (t token) String() string { return string(t) }
