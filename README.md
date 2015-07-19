@@ -7,7 +7,7 @@ Full featured language tools suite. Build your own DSL!
 The recommended way to install langtulia
 
 ```
-go get -t gopkg.in/toqueteos/langulia.v1
+go get -t gopkg.in/toqueteos/langtulia.v0
 ```
 
 ## Examples
