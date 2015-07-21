@@ -20,6 +20,7 @@ var (
 	SPACE  = token.New("space")
 )
 
+// single function grammar just for testing all public API methods.
 func lexText(l *Lexer) StateFn {
 	switch r := l.Next(); {
 	case r == EOF:
@@ -74,10 +75,10 @@ func isSpace(r rune) bool {
 	return r == ' ' || r == '\t'
 }
 
-var itemEOF = Item{TokenEOF, ""}
+var itemEOF = Token{TokenEOF, ""}
 
-func item(t token.Token) Item { return Item{t, t.Text()} }
-func itemErr(err string) Item { return Item{TokenError, err} }
+func item(t token.Token) Token { return Token{t, t.Text()} }
+func itemErr(err string) Token { return Token{TokenError, err} }
 
 func TestLexer(t *testing.T) {
 	var (
@@ -85,34 +86,34 @@ func TestLexer(t *testing.T) {
 		itemRPAREN = item(RPAREN)
 		itemA      = item(A)
 		itemB      = item(B)
-		itemX      = Item{X, "xx"}
-		itemY      = Item{Y, "yyy"}
+		itemX      = Token{X, "xx"}
+		itemY      = Token{Y, "yyy"}
 		itemZOO    = item(ZOO)
 		itemOR     = item(OR)
 	)
 	type TestCase struct {
 		Input    string
-		Expected []Item
+		Expected []Token
 	}
 	tests := []TestCase{
-		{"", []Item{itemEOF}},
-		{"aa|b", []Item{itemA, itemA, itemOR, itemB, itemEOF}},
-		{"a  a|b", []Item{itemA, Item{SPACE, "  "}, itemA, itemOR, itemB, itemEOF}},
-		{"a(a|b)", []Item{itemA, itemLPAREN, itemA, itemOR, itemB, itemRPAREN, itemEOF}},
-		{"abc", []Item{itemA, itemB, itemErr("got c")}},
-		{"abd", []Item{itemA, itemB, itemEOF}},
-		{"axb", []Item{itemA, Item{X, "x"}, itemB, itemEOF}},
-		{"axxb", []Item{itemA, itemX, itemB, itemEOF}},
-		{"ayyb", []Item{itemA, Item{Y, "yy"}, itemB, itemEOF}},
-		{"ayyyb", []Item{itemA, itemY, itemB, itemEOF}},
-		{"ayyyyyyb", []Item{itemA, itemY, itemY, itemB, itemEOF}},
-		{"zob", []Item{itemErr("not zoo")}},
-		{"zoob", []Item{itemZOO, itemB, itemEOF}},
+		{"", []Token{itemEOF}},
+		{"aa|b", []Token{itemA, itemA, itemOR, itemB, itemEOF}},
+		{"a  a|b", []Token{itemA, Token{SPACE, "  "}, itemA, itemOR, itemB, itemEOF}},
+		{"a(a|b)", []Token{itemA, itemLPAREN, itemA, itemOR, itemB, itemRPAREN, itemEOF}},
+		{"abc", []Token{itemA, itemB, itemErr("got c")}},
+		{"abd", []Token{itemA, itemB, itemEOF}},
+		{"axb", []Token{itemA, Token{X, "x"}, itemB, itemEOF}},
+		{"axxb", []Token{itemA, itemX, itemB, itemEOF}},
+		{"ayyb", []Token{itemA, Token{Y, "yy"}, itemB, itemEOF}},
+		{"ayyyb", []Token{itemA, itemY, itemB, itemEOF}},
+		{"ayyyyyyb", []Token{itemA, itemY, itemY, itemB, itemEOF}},
+		{"zob", []Token{itemErr("not zoo")}},
+		{"zoob", []Token{itemZOO, itemB, itemEOF}},
 	}
 
 	for idx, tt := range tests {
 		_, items := New(tt.Input, lexText)
-		var output []Item
+		var output []Token
 		for item := range items {
 			output = append(output, item)
 		}
@@ -124,14 +125,14 @@ func TestLexer(t *testing.T) {
 
 func TestItemString(t *testing.T) {
 	type TestCase struct {
-		Input    Item
+		Input    Token
 		Expected string
 	}
 	tests := []TestCase{
 		{item(A), `"a"`},
 		{item(TokenEOF), "EOF"},
-		{Item{TokenError, "some error"}, "some error"},
-		{Item{token.New("long"), "test string output for long values"}, `"test strin"...`},
+		{Token{TokenError, "some error"}, "some error"},
+		{Token{token.New("long"), "test string output for long values"}, `"test strin"...`},
 	}
 
 	for idx, tt := range tests {

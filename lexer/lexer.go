@@ -20,23 +20,23 @@ var (
 	TokenEOF   = token.New("EOF")
 )
 
-// Item contains a token and its value.
-type Item struct {
+// Token contains a token and its value.
+type Token struct {
 	Token token.Token
 	Value string
 }
 
-func (i Item) String() string {
-	switch i.Token {
+func (t Token) String() string {
+	switch t.Token {
 	case TokenError:
-		return i.Value
+		return t.Value
 	case TokenEOF:
 		return "EOF"
 	}
-	if len(i.Value) > 10 {
-		return fmt.Sprintf("%.10q...", i.Value)
+	if len(t.Value) > 10 {
+		return fmt.Sprintf("%.10q...", t.Value)
 	}
-	return fmt.Sprintf("%q", i.Value)
+	return fmt.Sprintf("%q", t.Value)
 }
 
 // StateFn represents the state of the lexer as a function that returns the next
@@ -47,33 +47,33 @@ type StateFn func(*Lexer) StateFn
 const EOF = -1
 
 type Lexer struct {
-	input string    // the string being scanned.
-	start int       // start position of this item.
-	pos   int       // current position in the input.
-	width int       // width of last rune read from input.
-	items chan Item // channel of scanned items.
+	input  string     // the string being scanned.
+	start  int        // start position of this token.
+	pos    int        // current position in the input.
+	width  int        // width of last rune read from input.
+	tokens chan Token // channel of scanned tokens.
 }
 
 // New creates a new Lexer and starts the scanning process.
-func New(input string, start StateFn) (*Lexer, chan Item) {
+func New(input string, start StateFn) (*Lexer, chan Token) {
 	l := &Lexer{
-		input: input,
-		items: make(chan Item),
+		input:  input,
+		tokens: make(chan Token),
 	}
 	go l.run(start)
-	return l, l.items
+	return l, l.tokens
 }
 
 func (l *Lexer) run(start StateFn) {
 	for state := start; state != nil; {
 		state = state(l)
 	}
-	close(l.items) // No more tokens will be delivered.
+	close(l.tokens) // No more tokens will be delivered.
 }
 
-// Emit passes an item back to the client.
+// Emit passes a token back to the client.
 func (l *Lexer) Emit(t token.Token) {
-	l.items <- Item{t, l.input[l.start:l.pos]}
+	l.tokens <- Token{t, l.input[l.start:l.pos]}
 	l.start = l.pos
 }
 
@@ -120,7 +120,7 @@ func (l *Lexer) AcceptRun(valid string) {
 // Errorf returns an error token and terminates the scan by passing back a nil
 // pointer that will be the next state, terminating l.Run.
 func (l *Lexer) Errorf(format string, args ...interface{}) StateFn {
-	l.items <- Item{TokenError, fmt.Sprintf(format, args...)}
+	l.tokens <- Token{TokenError, fmt.Sprintf(format, args...)}
 	return nil
 }
 
