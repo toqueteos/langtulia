@@ -1,4 +1,4 @@
-// lexer defines a concurrent and extensible lexer.
+// concurrent and extensible lexer.
 //
 // It is heavily based on text/template lexer:
 // http://golang.org/src/text/template/parse/lex.go
